@@ -1863,13 +1863,14 @@ class Application():
             draw.text((13, 33), u"%s" % (_("%d reviews") % package.num_reviews), font=sans10, fill="#555555")
             tmpFile = tempfile.NamedTemporaryFile(delete=True)
             im.save (tmpFile.name + ".png")
+            print tmpFile.name
             subs['rating'] = tmpFile.name + ".png"
             subs['reviews'] = "<b>" + _("Reviews:") + "</b>"
         else:
             subs['rating'] = "/usr/lib/linuxmint/mintInstall/data/no-reviews.png"
             subs['reviews'] = ""
 
-        template = open("/usr/lib/linuxmint/mintInstall/data/templates/PackageView.html")        
+        template = open("/usr/lib/linuxmint/mintInstall/data/templates/bootstrap/Package.html")
         html = string.Template(template.read()).safe_substitute(subs)
         self.packageBrowser.load_html_string(html, "file:/")
         template.close()
