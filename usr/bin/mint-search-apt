@@ -7,7 +7,7 @@ from user import home
 import gettext
 import gtk
 import gtk.glade
-import commands
+import subprocess
 
 def addListColumn(view, title, columnId):	
 	column = gtk.TreeViewColumn(title, gtk.CellRendererText(), text=columnId)
@@ -29,7 +29,7 @@ suggestion = sys.argv[1]
 gladefile = "/usr/lib/linuxmint/mintInstall/suggestions.glade"
 wTree = gtk.glade.XML(gladefile,"window_dialog_list")
 wTree.get_widget("window_dialog_list").set_icon_from_file("/usr/lib/linuxmint/mintInstall/icon.svg")
-wTree.get_widget("window_dialog_list").set_title("apt search " + suggestion)
+wTree.get_widget("window_dialog_list").set_title("apt search %s" % suggestion)
 wTree.get_widget("window_dialog_list").connect("destroy", gtk.main_quit)
 wTree.get_widget("label_no_results").set_text(_("No results"))
 lview = wTree.get_widget("listview")
@@ -42,7 +42,7 @@ addListColumn(lview, _("Package"), 1)
 addListColumn(lview, _("Description"), 2)
 lstore = gtk.ListStore(bool, str, str)
 lview.set_model(lstore)
-result = commands.getoutput("aptitude search " + suggestion)
+result = subprocess.check_output(["aptitude", "search", suggestion])
 results = str.split(result, "\n")
 foundAny = False
 for result in results:
@@ -67,7 +67,3 @@ lview.connect("row-activated", onRowActivated);
 wTree.get_widget("window_dialog_list").show()
 
 gtk.main()
-
-	
-
-
